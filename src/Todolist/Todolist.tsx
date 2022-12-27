@@ -17,22 +17,30 @@ type TodolistPropsType = {
 
 
 export function Todolist({title, task, removeTask, changeFilter, addTask}: TodolistPropsType) {
-const[value, setValue] = useState('')
+    const [value, setValue] = useState('')
 
     function addTaskHandler() {
         addTask(value)
         setValue('')
     }
 
-    function onChangeHandler(e:React.ChangeEvent<HTMLInputElement>) {
+    function onChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         setValue(e.currentTarget.value)
+    }
+
+    function onKeyPressHandler(e: React.KeyboardEvent<HTMLInputElement>) {
+if(e.key=== 'Enter'){
+    addTask(value)
+    setValue('')
+}
     }
 
     return (
         <div>
             <h3>{title}</h3>
             <div>
-                <input value={value} onChange={onChangeHandler}/>
+                <input value={value} onChange={onChangeHandler}
+                       onKeyPress={onKeyPressHandler}/>
                 <button onClick={addTaskHandler}>+</button>
             </div>
             <ul>
