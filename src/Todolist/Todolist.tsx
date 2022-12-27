@@ -34,7 +34,15 @@ if(e.key=== 'Enter'){
     setValue('')
 }
     }
-
+function onClickAllHandler() {
+    changeFilter('all')
+}
+    function onClickCompletedHandler() {
+        changeFilter('completed')
+    }
+    function onClickActiveHandler() {
+        changeFilter('active')
+    }
     return (
         <div>
             <h3>{title}</h3>
@@ -61,9 +69,9 @@ if(e.key=== 'Enter'){
                 }
             </ul>
             <div>
-                <button onClick={() => changeFilter('all')}>All</button>
-                <button onClick={() => changeFilter('active')}>Active</button>
-                <button onClick={() => changeFilter('completed')}>Completed</button>
+                <button onClick={onClickAllHandler}>All</button>
+                <button onClick={onClickActiveHandler}>Active</button>
+                <button onClick={onClickCompletedHandler}>Completed</button>
             </div>
         </div>
     )
