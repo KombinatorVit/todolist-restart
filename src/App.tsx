@@ -13,8 +13,14 @@ function App() {
         {id: v1(), title: "JS", isDone: true},
         {id: v1(), title: "ReactJS", isDone: false}
     ])
-    const [filter, setFilter] = useState<FilterValueType>('active')
+    const [filter, setFilter] = useState<FilterValueType>('all')
 
+
+    function addTask(newTitle: string){
+        const task = {id:v1(), title: newTitle, isDone: false}
+        setTasks([task, ...tasks])
+
+    }
     function removeTask(taskId: string) {
         setTasks(tasks.filter(t => t.id !== taskId))
     }
@@ -36,6 +42,7 @@ function App() {
             <Todolist title="What to learn" task={taskForTodolists}
                       removeTask={removeTask}
                       changeFilter={changeFilter}
+                      addTask={addTask}
             />
         </div>
     )
