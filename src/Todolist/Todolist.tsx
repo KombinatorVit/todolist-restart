@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState} from "react";
 import {FilterValueType} from "../App";
 
 export type TaskType = {
@@ -13,10 +13,11 @@ type TodolistPropsType = {
     removeTask: (taskId: string) => void
     changeFilter: (value: FilterValueType) => void
     addTask: (newTitle: string) => void
+    changeTaskStatus:(id:string, isDone:boolean)=> void
 }
 
 
-export function Todolist({title, task, removeTask, changeFilter, addTask}: TodolistPropsType) {
+export function Todolist({title, task, removeTask, changeFilter, addTask, changeTaskStatus}: TodolistPropsType) {
     const [value, setValue] = useState('')
 
     function addTaskHandler() {
@@ -43,6 +44,9 @@ function onClickAllHandler() {
     function onClickActiveHandler() {
         changeFilter('active')
     }
+
+
+
     return (
         <div>
             <h3>{title}</h3>
@@ -59,8 +63,11 @@ function onClickAllHandler() {
                         function onClickRemoveTaskHandler() {
                             removeTask(t.id)
                         }
+                        function changeStatusHandler(e: React.MouseEvent<HTMLInputElement, MouseEvent>) {
+                            changeTaskStatus(t.id, e.currentTarget.checked)
+                        }
 
-                        return (<li key={t.id}><input type="checkbox" checked={t.isDone}/> <span>{t.title}</span>
+                        return (<li key={t.id}><input type="checkbox" checked={t.isDone} onClick={changeStatusHandler}/> <span>{t.title}</span>
                                 <button onClick={onClickRemoveTaskHandler}> ✖️</button>
                             </li>
 
