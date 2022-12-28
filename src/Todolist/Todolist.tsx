@@ -8,24 +8,24 @@ export type TaskType = {
 }
 
 type TodolistPropsType = {
-    id:string
+    todolistId:string
     title: string
-    task: Array<TaskType>
-    removeTask: (taskId: string) => void
+    tasks: Array<TaskType>
+    removeTask: (taskId: string,todolistId:string) => void
     changeFilter: (id:string, value: FilterValueType) => void
-    addTask: (newTitle: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    addTask: (newTitle: string, todolistId: string) => void
+    changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
     filter: FilterValueType
 }
 
 
-export function Todolist({id,title, task, removeTask, changeFilter, addTask, changeTaskStatus, filter}: TodolistPropsType) {
+export function Todolist({todolistId,title, tasks, removeTask, changeFilter, addTask, changeTaskStatus, filter}: TodolistPropsType) {
     const [value, setValue] = useState('')
     const [error, setError] = useState<string | null>(null)
 
     function addTaskHandler() {
         if (value.trim() !== '') {
-            addTask(value.trim())
+            addTask(todolistId,value.trim())
             setValue('')
         } else {
             setError('Title is require')
@@ -41,21 +41,21 @@ export function Todolist({id,title, task, removeTask, changeFilter, addTask, cha
         setError(null)
 
         if (e.key === 'Enter') {
-            addTask(value.trim())
+            addTask(todolistId,value.trim())
             setValue('')
         }
     }
 
     function onClickAllHandler() {
-        changeFilter(id,'all')
+        changeFilter(todolistId,'all')
     }
 
     function onClickCompletedHandler() {
-        changeFilter(id,'completed')
+        changeFilter(todolistId,'completed')
     }
 
     function onClickActiveHandler() {
-        changeFilter(id,'active')
+        changeFilter(todolistId,'active')
     }
 
 
@@ -71,15 +71,15 @@ export function Todolist({id,title, task, removeTask, changeFilter, addTask, cha
             </div>
             <ul>
                 {
-                    task.map(t => {
+                    tasks.map(t => {
 
 
                         function onClickRemoveTaskHandler() {
-                            removeTask(t.id)
+                            removeTask(t.id, todolistId)
                         }
 
                         function changeStatusHandler(e: React.MouseEvent<HTMLInputElement, MouseEvent>) {
-                            changeTaskStatus(t.id, e.currentTarget.checked)
+                            changeTaskStatus(t.id, e.currentTarget.checked, todolistId)
                         }
 
                         return (<li key={t.id} className={t.isDone ? 'is-done' : ''}><input type="checkbox"   checked={t.isDone} onClick={changeStatusHandler} />
