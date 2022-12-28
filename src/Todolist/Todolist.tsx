@@ -8,6 +8,7 @@ export type TaskType = {
 }
 
 type TodolistPropsType = {
+    id:string
     title: string
     task: Array<TaskType>
     removeTask: (taskId: string) => void

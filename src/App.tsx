@@ -5,6 +5,11 @@ import {v1} from "uuid";
 
 
 export type FilterValueType = 'active' | 'all' | 'completed'
+export type TodolistsType = {
+    id: string
+    title: string
+    filter: FilterValueType
+}
 
 function App() {
 
@@ -14,6 +19,12 @@ function App() {
         {id: v1(), title: "ReactJS", isDone: false}
     ])
     const [filter, setFilter] = useState<FilterValueType>('all')
+    let [todolists, setTodolists] = useState<Array<TodolistsType>>(
+        [
+            {id: v1(), title: 'What to learn', filter: 'all'},
+            {id: v1(), title: 'What to buy', filter: 'all'},
+        ]
+    )
 
 
     function addTask(newTitle: string) {
@@ -30,8 +41,8 @@ function App() {
         setFilter(value)
     }
 
-    function changeTaskStatus(id: string, isDone:boolean) {
-        setTasks(tasks.map(t => t.id=== id ? {...t, isDone: isDone}:t ))
+    function changeTaskStatus(id: string, isDone: boolean) {
+        setTasks(tasks.map(t => t.id === id ? {...t, isDone: isDone} : t))
     }
 
     let taskForTodolists = tasks
@@ -44,13 +55,23 @@ function App() {
     }
     return (
         <div className='App'>
-            <Todolist title="What to learn" task={taskForTodolists}
-                      removeTask={removeTask}
-                      changeFilter={changeFilter}
-                      addTask={addTask}
-                      changeTaskStatus={changeTaskStatus}
-                      filter={filter}
-            />
+
+
+            {todolists.map(todolist => {
+                return (
+                    <Todolist
+                        id={todolist.id}
+                        key={todolist.id}
+                        title={todolist.title}
+                        task={taskForTodolists}
+                              removeTask={removeTask}
+                              changeFilter={changeFilter}
+                              addTask={addTask}
+                              changeTaskStatus={changeTaskStatus}
+                              filter={todolist.filter}
+                    />
+                )
+            })}
         </div>
     )
 }
