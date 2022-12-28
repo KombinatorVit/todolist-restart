@@ -18,7 +18,7 @@ function App() {
         {id: v1(), title: "JS", isDone: true},
         {id: v1(), title: "ReactJS", isDone: false}
     ])
-    const [filter, setFilter] = useState<FilterValueType>('all')
+    // const [filter, setFilter] = useState<FilterValueType>('all')
     let [todolists, setTodolists] = useState<Array<TodolistsType>>(
         [
             {id: v1(), title: 'What to learn', filter: 'all'},
@@ -37,27 +37,28 @@ function App() {
         setTasks(tasks.filter(t => t.id !== taskId))
     }
 
-    function changeFilter(value: FilterValueType) {
-        setFilter(value)
+    function changeFilter(id:string, value: FilterValueType) {
+       setTodolists(  todolists.map(t => t.id === id ? {...t, filter:value}: t))
     }
 
     function changeTaskStatus(id: string, isDone: boolean) {
         setTasks(tasks.map(t => t.id === id ? {...t, isDone: isDone} : t))
     }
 
-    let taskForTodolists = tasks
-    if (filter === 'active') {
-        taskForTodolists = tasks.filter(t => !t.isDone)
-    }
 
-    if (filter === 'completed') {
-        taskForTodolists = tasks.filter(t => t.isDone)
-    }
     return (
         <div className='App'>
 
 
             {todolists.map(todolist => {
+                let taskForTodolists = tasks
+                if (todolist.filter === 'active') {
+                    taskForTodolists = tasks.filter(t => !t.isDone)
+                }
+
+                if (todolist.filter === 'completed') {
+                    taskForTodolists = tasks.filter(t => t.isDone)
+                }
                 return (
                     <Todolist
                         id={todolist.id}

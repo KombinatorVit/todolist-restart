@@ -12,14 +12,14 @@ type TodolistPropsType = {
     title: string
     task: Array<TaskType>
     removeTask: (taskId: string) => void
-    changeFilter: (value: FilterValueType) => void
+    changeFilter: (id:string, value: FilterValueType) => void
     addTask: (newTitle: string) => void
     changeTaskStatus: (id: string, isDone: boolean) => void
     filter: FilterValueType
 }
 
 
-export function Todolist({title, task, removeTask, changeFilter, addTask, changeTaskStatus, filter}: TodolistPropsType) {
+export function Todolist({id,title, task, removeTask, changeFilter, addTask, changeTaskStatus, filter}: TodolistPropsType) {
     const [value, setValue] = useState('')
     const [error, setError] = useState<string | null>(null)
 
@@ -47,15 +47,15 @@ export function Todolist({title, task, removeTask, changeFilter, addTask, change
     }
 
     function onClickAllHandler() {
-        changeFilter('all')
+        changeFilter(id,'all')
     }
 
     function onClickCompletedHandler() {
-        changeFilter('completed')
+        changeFilter(id,'completed')
     }
 
     function onClickActiveHandler() {
-        changeFilter('active')
+        changeFilter(id,'active')
     }
 
 
