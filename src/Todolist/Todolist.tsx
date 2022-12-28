@@ -81,7 +81,7 @@ export function Todolist({title, task, removeTask, changeFilter, addTask, change
                             changeTaskStatus(t.id, e.currentTarget.checked)
                         }
 
-                        return (<li key={t.id}><input type="checkbox"   checked={t.isDone} onClick={changeStatusHandler} className={t.isDone ? 'is-done' : ''}/>
+                        return (<li key={t.id} className={t.isDone ? 'is-done' : ''}><input type="checkbox"   checked={t.isDone} onClick={changeStatusHandler} />
                                 <span>{t.title}</span>
                                 <button onClick={onClickRemoveTaskHandler}> ✖️</button>
                             </li>
