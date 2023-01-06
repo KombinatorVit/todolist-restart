@@ -1,3 +1,6 @@
+import React, {useReducer} from 'react';
+
+
 import './App.css';
 import {v1} from 'uuid';
 import {TodoList} from "./Todolist/Todolist";
@@ -5,14 +8,13 @@ import AddItemForm from "./AddItemForm";
 import MenuIcon from '@mui/icons-material/Menu';
 
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
-import {useReducer} from "react";
 import {
     AddTodolistAC,
     ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
+    ChangeTodolistTitleAC, RemoveTodolistAC,
     todolistsReducer
 } from "./state/todolists-reducer";
-import {tasksReducer} from "./state/task-reducer";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAc, removeTaskAC, tasksReducer} from "./state/task-reducer";
 
 export type TasksType = {
     id: string
@@ -38,11 +40,10 @@ function App() {
     let todolistID1 = v1();
     let todolistID2 = v1();
 
-
-    let inis = [{id: todolistID1, title: 'What to learn', filter: 'all'},
-        {id: todolistID2, title: 'What to buy', filter: 'all'}]
-
-    let [todolists, dispatchToTodolist] = useReducer(todolistsReducer, inis)
+    let [todolists, dispatchToTodolistReducer] = useReducer(todolistsReducer, [
+        {id: todolistID1, title: 'What to learn', filter: 'all'},
+        {id: todolistID2, title: 'What to buy', filter: 'all'},
+    ]);
 
     let [tasks, dispatchToTasks] = useReducer(tasksReducer, {
         [todolistID1]: [
@@ -58,26 +59,17 @@ function App() {
     });
 
     function addTodolist(title: string) {
-        // let newTodolistId = v1();
-        // let newTodolist: TodolistsType = {id: newTodolistId, title, filter: 'all'};
-        // setTodolists([newTodolist, ...todolists]);
-        // setTasks({
-        //     ...tasks,
-        //     [newTodolistId]: []
 
-
-        // });
         const action = AddTodolistAC(title)
         dispatchToTasks(action)
 
-        dispatchToTodolist(action)
+        dispatchToTodolistReducer(action)
     }
 
-    function changeFilter(value: FilterValueType, todolistID: string) {
+    function changeFilter(todolistID: string, value: FilterValueType) {
 
 
-        // setTodolists(todolists.map(el => el.id === todolistID ? {...el, filter: value} : el));
-        dispatchToTodolist(ChangeTodolistFilterAC(value, todolistID))
+        dispatchToTodolistReducer(ChangeTodolistFilterAC(todolistID, value))
 
 
     }
@@ -85,37 +77,32 @@ function App() {
     function removeTask(id: string, todolistId: string) {
 
 
-        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(el => el.id !== id)});
+        // setTasks({...tasks, [todolistId]: tasks[todolistId].filter(el => el.id !== id)});
+        dispatchToTasks(removeTaskAC(id, todolistId))
+
     }
 
     function addTask(title: string, todolistId: string) {
 
-        let task = {id: v1(), title: title, isDone: true};
-
-        let todolistTasks = tasks[todolistId];
-        tasks[todolistId] = [task, ...todolistTasks];
-
-        setTasks({...tasks});
+        dispatchToTasks(addTaskAC(title, todolistId))
 
     }
 
     function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
 
-        setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
+        dispatchToTasks(changeTaskTitleAc(id, newTitle, todolistId))
     }
 
     function changeTaskStatus(id: string, isDone: boolean, todolistId: string) {
 
 
-        setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, isDone} : el)});
+        dispatchToTasks(changeTaskStatusAC(id, isDone, todolistId))
     }
 
 
     function removeTodolist(id: string) {
-        setTodolists(todolists.filter(t => t.id !== id));
-        delete tasks[id];
-
-        setTasks({...tasks});
+        dispatchToTodolistReducer(RemoveTodolistAC(id));
+        dispatchToTasks(RemoveTodolistAC(id))
     }
 
 
@@ -123,7 +110,7 @@ function App() {
 
 
         // setTodolists(todolists.map(td => td.id === todolistId ? {...td, title: newTitle} : td))
-        dispatchToTodolist(ChangeTodolistTitleAC(todolistId, newTitle))
+        dispatchToTodolistReducer(ChangeTodolistTitleAC(todolistId, newTitle))
 
 
     };

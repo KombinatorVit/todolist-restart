@@ -8,9 +8,9 @@ type ActionType =
     ReturnType<typeof addTaskAC> |
     ReturnType<typeof changeTaskStatusAC> |
     ReturnType<typeof changeTaskTitleAc> |
-    AddTodolistsActionType |RemoveTodolistActionType
+    AddTodolistsActionType | RemoveTodolistActionType
 
-export const tasksReducer = (state: TaskStateType, action: ActionType) => {
+export const tasksReducer = (state: TaskStateType, action: ActionType): TaskStateType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {...state, [action.todolistId]: state[action.todolistId].filter(el => el.id !== action.id)}
@@ -35,7 +35,7 @@ export const tasksReducer = (state: TaskStateType, action: ActionType) => {
                     title: action.title
                 } : el)
             }
-        case 'ADD-TODOLIST':{
+        case 'ADD-TODOLIST': {
             const stateCopy = {...state}
             stateCopy[action.todolistId] = []
             return stateCopy
