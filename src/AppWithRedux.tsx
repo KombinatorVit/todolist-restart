@@ -34,7 +34,7 @@ export type TaskStateType = {
     [key: string]: Array<TasksType>
 }
 
-export function AppWithReducers() {
+function AppWithRedux() {
 
 
     let todolistID1 = v1();
@@ -181,3 +181,4 @@ export function AppWithReducers() {
     );
 }
 
+export default AppWithRedux;
