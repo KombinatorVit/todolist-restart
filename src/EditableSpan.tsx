@@ -9,7 +9,7 @@ type EditableSpanPropsType = {
 
 function EditableSpan(props: EditableSpanPropsType) {
 
-    console.log()
+    console.log('EditableSpan')
     let [editMode, setEditMode] = useState(false);
     let [title, setTitle] = useState('');
 
