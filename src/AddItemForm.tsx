@@ -1,5 +1,5 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {Button, IconButton, TextField} from "@mui/material";
+import { IconButton, TextField} from "@mui/material";
 import {AddBox} from "@mui/icons-material";
 
 
@@ -7,7 +7,8 @@ type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-const AddItemForm = (props: AddItemFormPropsType) => {
+const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+    console.log('AddItemForm Called!')
     let [title, setTitle] = useState('');
     let [error, setError] = useState<string | null>(null);
 
@@ -27,7 +28,10 @@ const AddItemForm = (props: AddItemFormPropsType) => {
     }
 
     function onKeyPressHandler(e: KeyboardEvent<HTMLInputElement>) {
-        setError(null)
+        if (error !== null) {
+            setError(null)
+
+        }
         if (e.key === 'Enter') {
             onAddTaskHandler();
         }
@@ -49,6 +53,6 @@ const AddItemForm = (props: AddItemFormPropsType) => {
 
 
     )
-}
+})
 
 export default AddItemForm;

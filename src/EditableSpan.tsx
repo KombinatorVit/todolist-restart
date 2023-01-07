@@ -8,6 +8,8 @@ type EditableSpanPropsType = {
 }
 
 function EditableSpan(props: EditableSpanPropsType) {
+
+    console.log()
     let [editMode, setEditMode] = useState(false);
     let [title, setTitle] = useState('');
 

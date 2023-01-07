@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import AddItemForm from '../AddItemForm';
 import {FilterValueType, TasksType} from "../App";
 import EditableSpan from "../EditableSpan";
@@ -19,32 +19,42 @@ export type TodoListPropsType = {
     changeTodolistTitle: (id: string, newTitle: string) => void
 }
 
-export function TodoList(props: TodoListPropsType) {
+export const TodoList = React.memo((props: TodoListPropsType) => {
+    console.log("Todolist called")
 
-    function onAddTaskHandler(title: string) {
+    const onAddTaskHandler = useCallback((title: string) => {
         props.addTask(title, props.id);
 
-    }
+    }, [props.addTask, props.id])
 
     function removeTodolistHandler() {
         props.removeTodolist(props.id);
     }
 
-    function onAllClickHandler() {
+    const onAllClickHandler = useCallback(() => {
         props.changeFilter(props.id, 'all')
-    }
+    }, [props.id])
 
-    function onActiveClickHandler() {
+    const onActiveClickHandler = useCallback(() => {
         props.changeFilter(props.id, 'active')
-    }
+    }, [props.id])
 
-    function onCompletedClickHandler() {
+    const onCompletedClickHandler = useCallback(() => {
         props.changeFilter(props.id, 'completed')
-    }
+    }, [props.id])
 
-    function changeTodolistTitle(newTitle: string) {
+
+    const changeTodolistTitle = useCallback((newTitle: string) => {
         props.changeTodolistTitle(props.id, newTitle);
+    }, [props.id])
 
+    let taskForTodolist = props.tasks;
+
+    if (props.filter === 'active') {
+        taskForTodolist = props.tasks.filter(t => !t.isDone);
+    }
+    if (props.filter === 'completed') {
+        taskForTodolist = props.tasks.filter(t => t.isDone);
     }
 
     return (
@@ -58,7 +68,7 @@ export function TodoList(props: TodoListPropsType) {
             <AddItemForm addItem={onAddTaskHandler}/>
             <div>
 
-                {props.tasks.map((t) => {
+                {taskForTodolist.map((t) => {
                     function removeTaskHandler() {
                         props.removeTask(t.id, props.id);
                     }
@@ -110,4 +120,4 @@ export function TodoList(props: TodoListPropsType) {
             </div>
         </div>
     );
-}
+})
