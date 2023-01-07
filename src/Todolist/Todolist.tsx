@@ -1,9 +1,10 @@
-import React, {ChangeEvent, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import AddItemForm from '../AddItemForm';
 import {FilterValueType, TasksType} from "../App";
 import EditableSpan from "../EditableSpan";
-import {Button, Checkbox, IconButton} from "@mui/material";
+import {Button, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import {Task} from "./Task";
 
 export type TodoListPropsType = {
     id: string
@@ -68,39 +69,13 @@ export const TodoList = React.memo((props: TodoListPropsType) => {
             <AddItemForm addItem={onAddTaskHandler}/>
             <div>
 
-                {taskForTodolist.map((t) => {
-                    function removeTaskHandler() {
-                        props.removeTask(t.id, props.id);
-                    }
-
-                    const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                        let newIsDoneValue = e.currentTarget.checked;
-                        props.changeTaskStatus(t.id, newIsDoneValue, props.id);
-                    };
-
-                    const onChangeTitleHandler = (newValue: string) => {
-                        props.changeTaskTitle(t.id, newValue, props.id,);
-                    };
-
-                    return (
-                        <div key={t.id} className={t.isDone ? 'is-done' : ''}>
-                            <Checkbox color={'primary'}
-                                      checked={t.isDone}
-                                      onChange={onChangeStatusHandler}
-                            />
-                            <EditableSpan
-                                title={t.title}
-                                onChange={onChangeTitleHandler}
-                            />
-                            <IconButton
-                                onClick={removeTaskHandler}>
-                                <Delete/>
-                            </IconButton>
-                        </div>
-
-
-                    );
-                })}
+                {taskForTodolist.map((t) => <Task key={t.id}
+                                                  task={t}
+                                                  id={props.id}
+                                                  removeTask={props.removeTask}
+                                                  changeTaskStatus={props.changeTaskStatus}
+                                                  changeTaskTitle={props.changeTaskTitle}
+                />)}
 
 
             </div>
