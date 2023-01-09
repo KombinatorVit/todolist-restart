@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 
 
-import './App.css';
+import './stories/App.css';
 import {TodoList} from "./Todolist/Todolist";
 import AddItemForm from "./addItemForm/AddItemForm";
 import MenuIcon from '@mui/icons-material/Menu';
