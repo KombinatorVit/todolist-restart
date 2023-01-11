@@ -12,17 +12,18 @@ import {Menu} from '@mui/icons-material';
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, fetchTodolistsThunk,
+    changeTodolistTitleAC,
     FilterValuesType,
-    removeTodolistAC, setTodolistsAC,
+    removeTodolistAC,
     TodolistDomainType
 } from './state/todolists-reducer'
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './state/store';
-import {TaskStatuses, TaskType, todolistApi} from './api/todolists-api'
+import {AppDispatch, AppRootStateType} from './state/store';
+import {TaskStatuses, TaskType} from './api/todolists-api'
 import {AddItemForm} from "./addItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {fetchTodolistsTС} from "./state/todolists-reducer";
 
 
 export type TasksStateType = {
@@ -34,10 +35,10 @@ function App() {
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const dispatch = useDispatch();
+    const dispatch = AppDispatch();
 
-    useEffect(()=>{
-        // dispatch(fetchTodolistsThunk)
+    useEffect(() => {
+        dispatch(fetchTodolistsTС())
 
     }, [])
 

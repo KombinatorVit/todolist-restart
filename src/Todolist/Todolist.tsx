@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useEffect} from 'react'
 
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -8,6 +8,9 @@ import {FilterValuesType} from "../state/todolists-reducer";
 import {EditableSpan} from "../editableSpan/EditableSpan";
 import {AddItemForm} from "../addItemForm/AddItemForm";
 import {Task} from "./task/Task";
+import {useDispatch} from "react-redux";
+import {fetchTasksThunkTC} from "../state/tasks-reducer";
+import {AppDispatch} from "../state/store";
 
 type PropsType = {
     id: string
@@ -26,6 +29,7 @@ type PropsType = {
 
 export const Todolist = React.memo(function (props: PropsType) {
     console.log('Todolist called')
+    const dispatch = AppDispatch();
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
@@ -42,7 +46,9 @@ export const Todolist = React.memo(function (props: PropsType) {
     const onActiveClickHandler = useCallback(() => props.changeFilter('active', props.id), [props.id, props.changeFilter])
     const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.id), [props.id, props.changeFilter])
 
-
+    useEffect(()=>{
+        dispatch(fetchTasksThunkTC(props.id))
+    },)
     let tasksForTodolist = props.tasks
 
     if (props.filter === 'active') {
