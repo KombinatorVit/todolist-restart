@@ -1,6 +1,7 @@
 import {v1} from 'uuid';
 import {todolistApi, TodolistType} from '../api/todolists-api'
 import {Dispatch} from "redux";
+import {LocalGasStation} from "@mui/icons-material";
 
 export type RemoveTodolistActionType = {
     type: 'REMOVE-TODOLIST',
@@ -100,6 +101,7 @@ export const setTodolistsAC = (todolists: Array<TodolistType>): SetTodolistsActi
 
 export const fetchTodolistsTС = () => {
     return (dispatch: Dispatch) => {
+        console.log(todolistApi)
         todolistApi.getTodolist().then((res) => {
             dispatch(setTodolistsAC(res.data))
         })

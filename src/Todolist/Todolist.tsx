@@ -8,8 +8,7 @@ import {FilterValuesType} from "../state/todolists-reducer";
 import {EditableSpan} from "../editableSpan/EditableSpan";
 import {AddItemForm} from "../addItemForm/AddItemForm";
 import {Task} from "./task/Task";
-import {useDispatch} from "react-redux";
-import {fetchTasksThunkTC} from "../state/tasks-reducer";
+import {fetchTasksTC} from "../state/tasks-reducer";
 import {AppDispatch} from "../state/store";
 
 type PropsType = {
@@ -47,8 +46,8 @@ export const Todolist = React.memo(function (props: PropsType) {
     const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.id), [props.id, props.changeFilter])
 
     useEffect(()=>{
-        dispatch(fetchTasksThunkTC(props.id))
-    },)
+        dispatch(fetchTasksTC(props.id))
+    },[])
     let tasksForTodolist = props.tasks
 
     if (props.filter === 'active') {
