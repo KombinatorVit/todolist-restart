@@ -17,7 +17,12 @@ import {
     removeTodolistAC,
     TodolistDomainType
 } from './state/todolists-reducer'
-import {addTaskAC, addTaskTC, changeTaskStatusAC, changeTaskTitleAC, removeTaskTC} from './state/tasks-reducer';
+import {
+    addTaskTC,
+    changeTaskTitleAC,
+    removeTaskTC,
+    updateTaskStatusTC
+} from './state/tasks-reducer';
 import {AppDispatch, useAppSelector} from './state/store';
 import {TaskStatuses, TaskType} from './api/todolists-api'
 import {AddItemForm} from "./addItemForm/AddItemForm";
@@ -51,7 +56,7 @@ function App() {
     }, []);
 
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        const action = changeTaskStatusAC(id, status, todolistId);
+        const action = updateTaskStatusTC(id, todolistId, status);
         dispatch(action);
     }, []);
 
