@@ -1,22 +1,35 @@
-export function Todolist() {
+import {FilterValueType, TasksType} from "../App";
+
+type TodoPropsType = {
+    title: string
+    tasks: TasksType[]
+    removeTask: (taskId: string) => void
+    changeFilter: (value: FilterValueType) => void
+}
+
+
+export function Todolist(props: TodoPropsType): JSX.Element {
 
 
     return (
         <div>
-            <h3>What to learn</h3>
+            <h3>{props.title}</h3>
             <div>
                 <input/>
                 <button>+</button>
             </div>
             <ul>
-                <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-                <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-                <li><input type="checkbox" checked={false}/> <span>React</span></li>
+                {props.tasks.map(t => {
+                    return <li key={t.id}><input type="checkbox" checked={t.isDone}/> <span>{t.title}</span>
+                        <button onClick={() => props.removeTask(t.id)}>✖️</button>
+                    </li>
+                })}
+
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => props.changeFilter('all')}>All</button>
+                <button onClick={() => props.changeFilter('active')}>Active</button>
+                <button onClick={() => props.changeFilter('completed')}>Completed</button>
             </div>
         </div>
     )
