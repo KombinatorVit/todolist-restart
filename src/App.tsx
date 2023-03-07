@@ -38,11 +38,17 @@ function App() {
         setFilter(value)
     }
 
+
+    function addTask(value: string) {
+        const newTask = {id: v1(), title:value, isDone: false}
+        setTasks([newTask, ...tasks])
+    }
+
     return (
         <div className="App">
 
             <Todolist tasks={tasksForTodolist} title={'What tot Learn'} removeTask={removeTask}
-                      changeFilter={changeFilter}/>
+                      changeFilter={changeFilter} addTask={addTask}/>
 
 
         </div>
