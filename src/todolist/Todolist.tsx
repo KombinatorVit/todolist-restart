@@ -1,5 +1,7 @@
-import React, {ChangeEvent, FC, useState} from "react";
+import React, {ChangeEvent, FC} from "react";
 import {FilterValueType, TasksType} from "../App";
+import AddItemForm from "../AddItemForm";
+import EditableSpan from "../EditableSpan";
 
 type TodolistPropsType = {
     title: string
@@ -8,9 +10,11 @@ type TodolistPropsType = {
     changeFilter: (value: FilterValueType, todoId: string) => void
     addTask: (title: string, todoId: string) => void
     changeTaskStatus: (id: string, isDone: boolean, todoId: string) => void
+    changeTaskTitle: (id: string, title: string, todoId: string) => void
     filter: FilterValueType
     todoId: string
     removeTodolist: (id: string) => void
+    changeTodolistTitle: (id: string, title: string) => void
 }
 
 export const Todolist: FC<TodolistPropsType> = ({
@@ -20,35 +24,9 @@ export const Todolist: FC<TodolistPropsType> = ({
                                                     changeFilter,
                                                     addTask,
                                                     changeTaskStatus,
-                                                    filter, todoId, removeTodolist
+                                                    filter, todoId, removeTodolist, changeTaskTitle, changeTodolistTitle
                                                 }) => {
-    const [value, setValue] = useState("");
-    const [error, setError] = useState<null | string>(null);
 
-    function onChangeInputHandler(e: ChangeEvent<HTMLInputElement>) {
-        setValue(e.currentTarget.value);
-    }
-
-    function onAddTaskHandler() {
-
-        if (value.trim() !== "") {
-            addTask(value.trim(), todoId);
-            setValue("");
-        } else {
-            setError("Title is Required");
-        }
-
-
-    }
-
-    function onKeyPressHandler(e: React.KeyboardEvent<HTMLInputElement>) {
-        setError(null);
-
-        if (e.key === "Enter") {
-            addTask(value, todoId);
-            setValue("");
-        }
-    }
 
     function onAllClickHandler() {
         changeFilter("all", todoId);
@@ -66,16 +44,22 @@ export const Todolist: FC<TodolistPropsType> = ({
         removeTodolist(todoId);
     }
 
+    function addTaskHandler(title: string) {
+        addTask(title, todoId);
+    }
+
+    function onChangeTodolistHandler(title: string) {
+        changeTodolistTitle(todoId, title);
+    }
+
     return (
         <div>
-            <h3>{title}
+            <h3>
+                <EditableSpan title={title} onChange={onChangeTodolistHandler}/>
                 <button onClick={onClickRemoveButtonHandler}>x</button>
             </h3>
             <div>
-                <input value={value} onChange={onChangeInputHandler} onKeyPress={onKeyPressHandler}
-                       className={error ? "error" : ""}/>
-                <button onClick={onAddTaskHandler}>+</button>
-                {error && <div className={error ? "error-message" : ""}>{error}</div>}
+                <AddItemForm addItem={addTaskHandler}/>
             </div>
             <ul>
 
@@ -89,6 +73,10 @@ export const Todolist: FC<TodolistPropsType> = ({
                         changeTaskStatus(task.id, e.currentTarget.checked, todoId);
                     }
 
+                    function onChangeTaskHandler(title: string) {
+                        changeTaskTitle(task.id, title, todoId);
+                    }
+
                     return (
 
                         <div key={task.id}>
@@ -96,8 +84,7 @@ export const Todolist: FC<TodolistPropsType> = ({
                                                                                 onChange={onChangeCheckedHandler}
                                                                                 checked={task.isDone}
                             />
-                                <span>{task.title}</span>
-
+                                <EditableSpan title={task.title} onChange={onChangeTaskHandler}/>
                                 <button onClick={removeTaskHandler}>✖️</button>
                             </li>
 

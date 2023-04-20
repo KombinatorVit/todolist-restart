@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import "./App.css";
 import {Todolist} from "./todolist/Todolist";
 import {v1} from "uuid";
+import AddItemForm from "./AddItemForm";
 
 export type TasksType = {
     id: string
@@ -66,6 +67,10 @@ function App() {
         setTasks({...tasks, [todoId]: tasks[todoId].map(el => el.id === id ? {...el, isDone} : el)});
     }
 
+    function changeTaskTitle(id: string, title: string, todoId: string) {
+        setTasks({...tasks, [todoId]: tasks[todoId].map(el => el.id === id ? {...el, title} : el)});
+    }
+
     function removeTodolist(id: string) {
         setTodolists(todolists.filter(el => el.id !== id));
         delete tasks[id];
@@ -73,13 +78,26 @@ function App() {
 
     }
 
+    function addTodolist(title: string) {
+        let newTodolistId = v1();
+        let newTodolist: TodolistsType = {id: newTodolistId, title, filter: "all"};
+
+        setTodolists([newTodolist, ...todolists]);
+        setTasks({...tasks, [newTodolistId]: []});
+
+    }
+
+    function changeTodolistTitle(id: string, newTitle: string,) {
+        setTodolists(todolists.map(t => t.id === id ? {...t, title: newTitle} : t));
+    }
+
     return (
         <div className="App">
+            <AddItemForm addItem={addTodolist}/>
 
 
             {
                 todolists.map(todo => {
-
                     let filteredTasks = tasks[todo.id];
                     if (todo.filter === "active") {
                         filteredTasks = tasks[todo.id].filter(task => task.isDone);
@@ -92,9 +110,11 @@ function App() {
                         <Todolist key={todo.id} todoId={todo.id} title={todo.title} tasks={filteredTasks}
                                   removeTask={removeTask} changeFilter={changeFilter}
                                   addTask={addTask} changeTaskStatus={changeTaskStatus} filter={todo.filter}
-                                  removeTodolist={removeTodolist}
+                                  removeTodolist={removeTodolist} changeTaskTitle={changeTaskTitle}
+                                  changeTodolistTitle={changeTodolistTitle}
 
                         />
+
                     );
 
                 })
