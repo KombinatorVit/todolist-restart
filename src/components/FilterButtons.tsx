@@ -5,6 +5,8 @@ import Button from "./Button";
 type FilterButtonsPropsType = {
     changeFilter: (value: FilterValuesType) => void
 }
+
+
 const FilterButtons = (props: FilterButtonsPropsType) => {
     return (
         <div>
